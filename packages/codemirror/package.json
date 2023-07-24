@@ -1,6 +1,16 @@
 {
   "name": "@jupyter/markdown-codemirror",
+  "version": "1.0.0-alpha.0",
+  "description": "Jupyter Markdown renderer",
+  "license": "BSD-3-Clause",
   "type": "module",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/*.d.ts",
+    "lib/*.js.map",
+    "lib/*.js",
+    "src/**/*.ts"
+  ],
   "dependencies": {
     "@codemirror/lang-markdown": "^6.1.1",
     "@codemirror/language": "^6.6.0",

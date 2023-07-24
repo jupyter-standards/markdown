@@ -1,0 +1,18 @@
+{% extends "base.html.jinja2" %}
+
+{% block head %}
+<script defer src="./editor.bundle.js"></script>
+{% endblock %}
+
+{% block content %}
+<article>
+<h1>Try Jupyter Markdown</h1>
+
+<p>Write some Markdown prose in the editor and see how it will be rendered using Jupyter flavored Markdown.</p>
+
+<table>
+    <tr id="editor"></tr>
+    <tr id="rendered"></tr>
+</table>
+</article>
+{% endblock %}
