@@ -5,23 +5,22 @@
   },
   "license": "BSD-3-Clause",
   "private": true,
-  "bin": {
-    "render": "./scripts/build.mjs"
+  "scripts": {
+    "build": "npm run clean && webpack --mode=development && node scripts/build.mjs",
+    "clean": "rimraf dist/"
   },
   "dependencies": {
-    "@codemirror/lang-markdown": "^6.2.0",
     "@codemirror/view": "^6.15.3",
     "@jupyter/markdown": "workspace:^",
     "@jupyter/markdown-codemirror": "workspace:^",
     "codemirror": "^6.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.8",
-    "@babel/preset-env": "^7.22.7",
-    "@rollup/plugin-node-resolve": "^15.1.0",
+    "css-loader": "^6.8.1",
     "nunjucks": "^3.2.4",
     "rimraf": "^5.0.1",
-    "rollup": "^3.26.2",
-    "rollup-plugin-typescript2": "^0.35.0"
+    "style-loader": "^3.3.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
   }
 }

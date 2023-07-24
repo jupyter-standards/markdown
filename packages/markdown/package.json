@@ -12,6 +12,10 @@
     "lib/*.js",
     "src/**/*.ts"
   ],
+  "exports": {
+    ".": {"types": "./lib/index.d.ts", "default": "./lib/index.js"},
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "marked": "^5.1.0",
     "marked-gfm-heading-id": "^3.0.4",

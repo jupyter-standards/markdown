@@ -52,7 +52,7 @@ export interface IJupyterMarkdown {
   latexParser?: Parser;
 }
 
-export async function jupyterMarkdow(
+export async function jupyterMarkdown(
   config: IJupyterMarkdown = {}
 ): Promise<LanguageSupport> {
   const [m, tex] = await Promise.all([
