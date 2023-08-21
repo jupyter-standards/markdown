@@ -1,5 +1,34 @@
 {% extends "base.html.jinja2" %}
 
+{% block head %}
+<style>
+* {
+    user-select: none;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    width: 50%;
+    vertical-align: top;
+}
+
+#editor {
+    padding-top: 62px;
+}
+
+#raw {
+    user-select: text;
+}
+
+.cm-editor.cm-focused {
+    outline: solid var(--accent-fill-focus) calc(var(--focus-stroke-width) * 1px);
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <article>
 <h1>Try Jupyter Markdown</h1>
@@ -10,7 +39,14 @@
     <tbody>
         <tr>
             <td id="editor"></td>
-            <td id="rendered"></td>
+            <td>
+                <jp-tabs>
+                    <jp-tab>Preview</jp-tab>
+                    <jp-tab>HTML</jp-tab>
+                    <jp-tab-panel id="preview"></jp-tab-panel>
+                    <jp-tab-panel id="raw"></jp-tab-panel>
+                </jp-tabs>
+            </td>
         </tr>
     </tbody>
 </table>
