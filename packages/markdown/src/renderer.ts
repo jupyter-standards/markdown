@@ -13,9 +13,9 @@ import { MermaidMarkdown } from './markdown.js';
 const FENCE = '```~~~';
 
 export const DEFAULT_JUPYTER_MARKDOWN_OPTIONS: IJupyterMarkdownOptions = {
-  highlightCode: async (text: string, language: string, elt: HTMLElement) => {
+  highlightCode: (text: string, language: string) => {
     // By default insert text node
-    elt.appendChild(document.createTextNode(text));
+    return Promise.resolve(text);
   },
   mermaidRenderer: new MermaidMarkdown()
 };
@@ -35,7 +35,7 @@ export function render(
   }
 
   return Private.render(content, {
-    highlighCode: options.highlightCode,
+    highlightCode: options.highlightCode,
     blocks
   });
 }
@@ -49,24 +49,19 @@ namespace Private {
   let _blocks: IFencedBlockRenderer[] = [];
   let _markedOptions: marked.MarkedOptions = {};
   let _highlights = new LruCache<string, string>();
-  let _highlightCode = async (
-    text: string,
-    language: string,
-    elt: HTMLElement
-  ) => {
+  let _highlightCode = (text: string, language: string) => {
     // By default insert text node
-    elt.appendChild(document.createTextNode(text));
+    return Promise.resolve(text);
   };
 
   /**
    * Options
    */
   export interface IRenderOptions {
-    highlighCode?: (
+    highlightCode?: (
       text: string,
-      language: string,
-      elt: HTMLElement
-    ) => Promise<void>;
+      language: string
+    ) => Promise<string>;
     blocks: IFencedBlockRenderer[];
   }
 
@@ -94,8 +89,8 @@ namespace Private {
       return await _initializing.promise;
     }
 
-    if (options.highlighCode) {
-      _highlightCode = options.highlighCode;
+    if (options.highlightCode) {
+      _highlightCode = options.highlightCode;
     }
 
     // order blocks by `rank`
@@ -196,15 +191,11 @@ namespace Private {
       // already cached, don't make another DOM element
       return;
     }
-    const el = document.createElement('div');
     try {
-      await _highlightCode(text, lang, el);
-      const html = `<pre><code class="language-${lang}">${el.innerHTML}</code></pre>`;
+      const html = `<pre><code class="language-${lang}">${await _highlightCode(text, lang)}</code></pre>`;
       _highlights.set(key, html);
     } catch (err) {
       console.error(`Failed to highlight ${lang} code`, err);
-    } finally {
-      el.remove();
     }
   }
 

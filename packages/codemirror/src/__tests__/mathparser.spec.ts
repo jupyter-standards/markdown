@@ -8,7 +8,7 @@
 
 import { Tree } from '@lezer/common';
 import { MarkdownParser, parser } from '@lezer/markdown';
-import { parseMathIPython } from '../ipython-md';
+import { parseMathIPython } from '../ipython-md.js';
 
 const ipythonParser = parser.configure([parseMathIPython()]);
 

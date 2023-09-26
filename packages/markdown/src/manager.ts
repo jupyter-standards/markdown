@@ -13,7 +13,7 @@ import {
   MERMAID_DEFAULT_THEME,
   SUMMARY_CLASS,
   WARNING_CLASS
-} from './tokens';
+} from './tokens.js';
 
 /**
  * A mermaid diagram manager with cache.

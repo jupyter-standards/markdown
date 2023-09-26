@@ -4,16 +4,24 @@
 <head>
     <meta charset="utf-8">
     <title>Jupyter Markdown Specification</title>
-    <!--
-    <script defer type="module" src="https://unpkg.com/@mdi/js@^7.2.96"></script>
-    -->
-    <link href="https://unpkg.com/@jupyterlab/apputils/style/materialcolors.css" rel="stylesheet" />
-    <link href="https://unpkg.com/@jupyterlab/theme-light-extension/style/theme.css" rel="stylesheet" />
     <script type="module" src="https://unpkg.com/@jupyter/web-components@~0.13.0/dist/toolkit.min.js"></script>
 
     <style>
+    /*
+        Minimal set of CSS properties from a JupyterLab theme
+        used to theme the toolkit.
+    */
+    :root {
+        --jp-brand-color1: #f37726;
+        --jp-layout-color1: #808080;
+        --jp-border-width: 1px;
+        --jp-ui-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --jp-ui-font-size1: 13px;
+    }
+
     body {
-        color: var(--foreground-on-accent-active);
+        background-color: var(--neutral-layer-1);
+        color: var(--neutral-foreground-rest);
         font-size: var(--type-ramp-base-font-size);
         line-height: var(--type-ramp-base-line-height);
         font-family: var(--body-font);
@@ -56,7 +64,7 @@
     {% block head %}{% endblock %}
 </head>
 
-<body data-jp-theme-name="default" data-jp-theme-light="true">
+<body>
     <header>
      <nav class="navbar">
         <a class="nav-brand" href="https://jupyter.org">
@@ -70,12 +78,44 @@
         <li><a href="{{ heading[1] }}">{{ heading[0] }}</a></li>{% endfor %}
         </ul>
      </nav>
+     <jp-button id="theme-mode"></jp-button>
     </header>
     {% block content %}{% endblock %}
     <script type="module">
-        // Inject JupyterLab theme listener
-        import { addJupyterLabThemeChangeListener } from 'https://unpkg.com/@jupyter/web-components/dist/toolkit.min.js';
-        addJupyterLabThemeChangeListener();
+        // Apply JupyterLab theme
+        import { applyJupyterTheme } from 'https://unpkg.com/@jupyter/web-components/dist/toolkit.min.js';
+
+        // Inject icon in theme mode button
+        fetch('https://unpkg.com/@mdi/svg@7.2.96/svg/brightness-6.svg')
+            .then(
+                r => r.text()
+            )
+            .then(
+                brightness6 => {
+                    document.querySelector('#theme-mode').insertAdjacentHTML('afterbegin', brightness6)
+                }
+            );
+
+        applyJupyterTheme();
+
+        function switchThemeMode(th) {
+            const mode = document.body.getAttribute('data-theme-mode');
+            document.body.setAttribute(
+                'data-theme-mode',
+                mode == 'light' ? 'dark' : 'light'
+            );
+            document.body.style.removeProperty('--jp-layout-color1');
+            document.body.style.setProperty(
+                '--jp-layout-color1',
+                // Apparent opposite condition as we don't update the mode variable
+                mode == 'dark' ? '#808080' : 'black'
+            );
+            applyJupyterTheme();
+        }
+
+        document.querySelector('#theme-mode').addEventListener('click', () => {
+            switchThemeMode();
+        });
     </script>
     {% block footer %}{% endblock %}
 </body>

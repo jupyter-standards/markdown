@@ -75,10 +75,16 @@ export interface IMermaidMarkdown
   extends Omit<IFencedBlockRenderer, 'languages' | 'rank'> {}
 
 export interface IJupyterMarkdownOptions {
+  /**
+   * Highlights a code block
+   *
+   * @param text Code block to highlight
+   * @param language Code block language
+   * @returns Stringified HTML code with highlights
+   */
   highlightCode?: (
     text: string,
-    language: string,
-    elt: HTMLElement
-  ) => Promise<void>;
+    language: string
+  ) => Promise<string>;
   mermaidRenderer?: IMermaidMarkdown;
 }

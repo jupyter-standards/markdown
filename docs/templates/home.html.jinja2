@@ -1,0 +1,21 @@
+{% extends "base.html.jinja2" %}
+
+{% block content %}
+<article>
+<h1>Jupyter Flavored Markdown Specification</h1>
+<p>Version</p>
+<blockquote>
+  This formal specification is based on the
+  <a href="http://spec.commonmark.org">CommonMark Spec</a> by
+  <a href="http://github.com/jgm">John MacFarlane</a> and licensed under
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+    <img style="vertical-align:middle" alt="Creative Commons BY-SA" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png">
+  </a>
+  and the <a href="https://github.github.com/gfm/">GitHub Flavored Markdown Spec</a> licensed under
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+    <img style="vertical-align:middle" alt="Creative Commons BY-SA" src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png">
+  </a>
+</blockquote>
+{{ spec | safe }}
+</article>
+{% endblock %}
