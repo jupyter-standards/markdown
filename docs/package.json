@@ -16,7 +16,8 @@
     "@codemirror/view": "^6.15.3",
     "@jupyter/markdown": "workspace:^",
     "@jupyter/markdown-codemirror": "workspace:^",
-    "codemirror": "^6.0.1"
+    "codemirror": "^6.0.1",
+    "diff-match-patch": "^1.0.4"
   },
   "devDependencies": {
     "css-loader": "^6.8.1",

@@ -62,25 +62,6 @@
     }
     </style>
     {% block head %}{% endblock %}
-</head>
-
-<body>
-    <header>
-     <nav class="navbar">
-        <a class="nav-brand" href="https://jupyter.org">
-            <picture>
-                <source media="(max-width: 767px)" srcset="https://jupyter.org/assets/logos/logomark-orangebody-greyplanets.svg">
-                <source media="(min-width: 768px)" srcset="https://jupyter.org/assets/logos/rectanglelogo-greytext-orangebody-greymoons.svg">
-                <img class="navbar-logo" src="https://jupyter.org/assets/logos/rectanglelogo-greytext-orangebody-greymoons.svg" alt="Jupyter Home" loading="eager" height="40">
-            </picture>
-        </a>
-        <ul class="nav-links">{% for heading in pages %}
-        <li><a href="{{ heading[1] }}">{{ heading[0] }}</a></li>{% endfor %}
-        </ul>
-     </nav>
-     <jp-button id="theme-mode"></jp-button>
-    </header>
-    {% block content %}{% endblock %}
     <script type="module">
         // Apply JupyterLab theme
         import { applyJupyterTheme } from 'https://unpkg.com/@jupyter/web-components/dist/toolkit.min.js';
@@ -117,6 +98,25 @@
             switchThemeMode();
         });
     </script>
+</head>
+
+<body>
+    <header>
+     <nav class="navbar">
+        <a class="nav-brand" href="https://jupyter.org">
+            <picture>
+                <source media="(max-width: 767px)" srcset="https://jupyter.org/assets/logos/logomark-orangebody-greyplanets.svg">
+                <source media="(min-width: 768px)" srcset="https://jupyter.org/assets/logos/rectanglelogo-greytext-orangebody-greymoons.svg">
+                <img class="navbar-logo" src="https://jupyter.org/assets/logos/rectanglelogo-greytext-orangebody-greymoons.svg" alt="Jupyter Home" loading="eager" height="40">
+            </picture>
+        </a>
+        <ul class="nav-links">{% for heading in pages %}
+        <li><a href="{{ heading[1] }}">{{ heading[0] }}</a></li>{% endfor %}
+        </ul>
+     </nav>
+     <jp-button id="theme-mode"></jp-button>
+    </header>
+    {% block content %}{% endblock %}
     {% block footer %}{% endblock %}
 </body>
 

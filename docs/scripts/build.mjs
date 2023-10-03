@@ -2,6 +2,10 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
+
+import {
+    diff_match_patch
+} from 'diff-match-patch';
 import { render as renderJpMd } from '@jupyter/markdown'
 import * as fs from 'fs';
 import { Environment, FileSystemLoader } from 'nunjucks';
@@ -42,7 +46,7 @@ async function buildSpecification() {
 
     let strippedMd = "";
     const examples = [];
-    const renderedExample = [];
+    const gfmExamples = [];
     let currentExample = -1
     let state = State.MARKDOWN
 
@@ -60,7 +64,7 @@ async function buildSpecification() {
             case State.EXAMPLE_MD:
                 if (line == '.') {
                     state = State.EXAMPLE_HTML
-                    renderedExample[currentExample] = '';
+                    gfmExamples[currentExample] = '';
                 } else {
                     examples[currentExample] += line + "\n"
                 }
@@ -70,15 +74,24 @@ async function buildSpecification() {
                     state = State.MARKDOWN
                     strippedMd += `@#@${currentExample}@#@\n`;
                 } else {
-                    renderedExample[currentExample] += line + "\n"
+                    gfmExamples[currentExample] += line + "\n"
                 }
                 break;
         }
     })
 
     const renderedSpec = await renderJpMd(strippedMd);
+    const jpExamples = await Promise.all(examples.map(example => renderJpMd(example.replace(/→/g, '\t'))));
+    const dmp = new diff_match_patch();
     return renderedSpec.replace(/@#@(\d+)@#@/g, (m, idx) => {
-        return `<table>
+        const jpTabHighlighted = jpExamples[idx].replace(/\t/g, '→')
+        const diffs = gfmExamples[idx] ? dmp.diff_main(gfmExamples[idx], jpTabHighlighted) : null;
+        if(diffs) {dmp.diff_cleanupSemantic(diffs)}
+
+        // Preview is encapsulated in iframe to avoid style contamination.
+        const exampleIdx = parseInt(idx, 10) + 1
+        return `<a href="#example-${exampleIdx}">Example ${exampleIdx}</a>
+<table>
     <tr>
         <td>
             <pre>
@@ -89,13 +102,17 @@ ${escape(examples[idx])}
             <jp-tabs orientation="horizontal">
                 <jp-tab>HTML</jp-tab>
                 <jp-tab>Preview</jp-tab>
+                <jp-tab>Diff${(diffs?.length ?? -1) === 1 ? '' : '<jp-badge circular fill="accent-primary"></jp-badge>'}</jp-tab>
                 <jp-tab-panel>
                     <code>
-${escape(renderedExample[idx])}
+${escape(jpTabHighlighted)}
                     </code>
                 </jp-tab-panel>
                 <jp-tab-panel>
-                    TODO this will be the preview result
+                    <iframe srcdoc="<!DOCTYPE html><html><body>${jpExamples[idx]}</body></html>" sandbox="allow-same-origin" frameborder="0"></iframe>
+                </jp-tab-panel>
+                <jp-tab-panel>
+                    ${diffs ? dmp.diff_prettyHtml(diffs) : 'This feature is not supported by the GitHub Markdown Flavor.'}
                 </jp-tab-panel>
             </jp-tabs>
         </td>

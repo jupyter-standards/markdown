@@ -1,5 +1,16 @@
 {% extends "base.html.jinja2" %}
 
+{% block head %}
+  <style>
+  jp-badge {
+    --badge-fill-accent-primary: var(--jp-brand-color1);
+    --density: -4;
+    margin: 0 4px;
+    width: 8px;
+  }
+  </style>
+{% endblock %}
+
 {% block content %}
 <article>
 <h1>Jupyter Flavored Markdown Specification</h1>
